@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/PuerkitoBio/purell"
+	"github.com/jloup/purell"
 )
 
 type URL struct {
@@ -63,7 +63,8 @@ func ParseFromObj(urlObj *url.URL) (*URL, error) {
 		}
 	}
 
-	if urlObj.Path == "/" {
+	escapedPath := urlObj.EscapedPath()
+	if escapedPath == "/" {
 		u.Dir = "/"
 		u.Path = "/"
 		if u.RawQuery != "" {
@@ -76,10 +77,10 @@ func ParseFromObj(urlObj *url.URL) (*URL, error) {
 		return &u, nil
 	}
 
-	if urlObj.Path != "" {
-		p := urlObj.Path
-		if urlObj.Path[len(urlObj.Path)-1:] == "/" {
-			p = urlObj.Path[:len(urlObj.Path)-1]
+	if escapedPath != "" {
+		p := escapedPath
+		if escapedPath[len(escapedPath)-1:] == "/" {
+			p = escapedPath[:len(escapedPath)-1]
 			trSlash = true
 		}
 
